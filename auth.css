@@ -1,223 +1,122 @@
-/* =========================================
-   Auth — Layout
-   ========================================= */
-.container {
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+/* =============================================
+   auth.super-hiko14.com の見た目(このファイルだけで完結)
+   super-hiko14.com と同じ色・同じドットの角。
+   フォントや画像も assets/ に置いてあり、ほかのサイトには頼らない。
+============================================= */
+@font-face{
+  font-family:"MaruMinya";
+  src:url(/assets/MaruMinya.ttf) format("truetype");
+  font-display:swap;
 }
-
-.auth-box {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 24px;
-  width: 100%;
+:root{
+  color-scheme:light;
+  --bg:#dcede1;
+  --ink:#1c231e;
+  --line:#607363;
+  --paper:#fbfcfa;
+  --hover:#eaf3ec;
+  --soft:#c5ddcc;
+  --bad:#b5524a;
+  --font:"MaruMinya","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  box-sizing:border-box;
 }
-
-@media (max-width: 480px) {
-  .auth-box {
-    padding: 30px 16px;
-  }
+*,*::before,*::after{box-sizing:inherit}
+html{background:var(--bg);-webkit-text-size-adjust:100%}
+body{
+  margin:0;min-height:100vh;min-height:100svh;
+  display:flex;flex-direction:column;
+  background:var(--bg);color:var(--ink);
+  font-family:var(--font);font-size:15px;line-height:1.8;
+  -webkit-tap-highlight-color:transparent;
+  padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);
 }
+a{color:inherit;text-underline-offset:3px;text-decoration-color:var(--line)}
+a:hover{text-decoration-thickness:2px}
+::selection{background:var(--soft)}
+code{font-family:inherit;font-size:.92em;background:var(--hover);padding:0 .3em}
 
-.footer-box {
-  width: 100%;
+/* まんなかに1枚のカード */
+.page{
+  flex:1;width:100%;max-width:480px;margin:0 auto;padding:28px 16px 0;
+  display:flex;flex-direction:column;justify-content:center;
+  animation:rise .5s cubic-bezier(.16,.9,.3,1) both;
 }
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
-/* =========================================
-   Auth Card
-   ========================================= */
-.auth-card {
-  width: 100%;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+/* ---------- ドットの角(chip = 押せるもの、card = 箱) ----------
+   --p が「ドット1つぶん」の大きさ(枠線の太さも同じ) */
+.chip,.card{
+  --p1:var(--p); --p2:calc(var(--p)*2); --p3:calc(var(--p)*3);
+  --q1:calc(100% - var(--p)); --q2:calc(100% - var(--p)*2); --q3:calc(100% - var(--p)*3);
+  position:relative;isolation:isolate;
+  background:var(--line);
+  clip-path:polygon(
+    0 var(--p3),var(--p1) var(--p3),var(--p1) var(--p2),var(--p2) var(--p2),var(--p2) var(--p1),var(--p3) var(--p1),var(--p3) 0,
+    var(--q3) 0,var(--q3) var(--p1),var(--q2) var(--p1),var(--q2) var(--p2),var(--q1) var(--p2),var(--q1) var(--p3),100% var(--p3),
+    100% var(--q3),var(--q1) var(--q3),var(--q1) var(--q2),var(--q2) var(--q2),var(--q2) var(--q1),var(--q3) var(--q1),var(--q3) 100%,
+    var(--p3) 100%,var(--p3) var(--q1),var(--p2) var(--q1),var(--p2) var(--q2),var(--p1) var(--q2),var(--p1) var(--q3),0 var(--q3));
 }
-
-.auth-logo {
-  width: 80px;
-  height: 80px;
-  border-radius: 24px;
-  object-fit: cover;
-  margin-bottom: 20px;
+.chip::before,.card::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:var(--paper);
+  clip-path:polygon(
+    var(--p1) var(--p3),var(--p2) var(--p3),var(--p2) var(--p2),var(--p3) var(--p2),var(--p3) var(--p1),
+    var(--q3) var(--p1),var(--q3) var(--p2),var(--q2) var(--p2),var(--q2) var(--p3),var(--q1) var(--p3),
+    var(--q1) var(--q3),var(--q2) var(--q3),var(--q2) var(--q2),var(--q3) var(--q2),var(--q3) var(--q1),
+    var(--p3) var(--q1),var(--p3) var(--q2),var(--p2) var(--q2),var(--p2) var(--q3),var(--p1) var(--q3));
+  transition:background-color .15s ease;
 }
-
-.auth-accent-bar {
-  width: 32px;
-  height: 2px;
-  background: linear-gradient(90deg, #275766 0%, #baffc0 100%);
-  border-radius: 2px;
-  margin-bottom: 20px;
+.card{--p:4px;padding:calc(1.4rem + var(--p)) calc(1.25rem + var(--p));text-align:center}
+.chip{
+  --p:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  margin:0;padding:calc(.4rem + var(--p)) calc(1.1rem + var(--p));
+  border:0;color:var(--ink);
+  font:inherit;font-size:20px;line-height:1.2;text-decoration:none;white-space:nowrap;cursor:pointer;
+  transition:background-color .15s ease;
 }
+.chip:hover,.chip:focus-visible{background:var(--ink)}
+.chip:hover::before,.chip:focus-visible::before{background:var(--hover)}
+.chip:focus-visible{outline:none;text-decoration:underline}
 
-.auth-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  letter-spacing: 0.06em;
-  margin: 0 0 10px;
+/* ---------- カードの中身 ---------- */
+.me{
+  display:block;width:84px;height:auto;margin:0 auto 10px;
+  image-rendering:pixelated;image-rendering:crisp-edges;
+  -webkit-user-drag:none;user-select:none;
 }
+.eyebrow{margin:0;color:var(--line);font-size:14px;line-height:1.4}
+h1{margin:.15em 0 .5em;font-size:28px;line-height:1.3;font-weight:normal}
+.lead{margin:0}
+.lead + .lead{margin-top:.6em}
+.is-error h1{color:var(--bad)}
+.alert{margin:0 0 1em;color:var(--bad)}
+.alert[hidden]{display:none}
+.action{margin:1.4em 0 0}
+.note{margin:1.4em 0 0;color:var(--line);font-size:13px;line-height:1.7}
 
-.auth-subtitle {
-  font-size: 0.85rem;
-  color: #888;
-  line-height: 1.7;
-  margin: 0 0 24px;
-  letter-spacing: 0.02em;
+/* Cloudflare Turnstile(幅が足りない画面でもはみ出さない) */
+.turnstile{display:flex;justify-content:center;min-height:65px;margin:1.3em 0 0;overflow:hidden}
+
+/* リダイレクト中の「...」 */
+.dots::after{content:"";animation:dots 1.2s steps(1) infinite}
+@keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
+
+/* ---------- 下 ---------- */
+.foot{
+  width:100%;max-width:480px;margin:0 auto;
+  padding:32px 16px 22px;
+  display:flex;flex-wrap:wrap;justify-content:center;gap:.3em 1.2em;
+  color:var(--line);font-size:14px;
 }
+.foot a{text-decoration:none}
+.foot a:hover{text-decoration:underline}
 
-html[data-theme="dark"] .auth-subtitle { color: #666; }
-
-/* =========================================
-   Auth Button (Discord blue)
-   ========================================= */
-.auth-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 14px 28px;
-  border-radius: 24px;
-  background: #393d69;
-  color: #fff;
-  font-size: 0.95rem;
-  font-weight: bold;
-  letter-spacing: 0.05em;
-  transition: transform 0.2s ease, background 0.2s ease;
-  width: 100%;
-  margin: 0 0 24px;
-  cursor: pointer;
-  text-decoration: none;
-  box-sizing: border-box;
+@media (max-width:420px){
+  h1{font-size:24px}
+  .card{padding:calc(1.2rem + var(--p)) calc(.9rem + var(--p))}
 }
-
-.auth-btn:hover {
-  background: #393d70;
-  transform: translateY(-2px);
+@media (prefers-reduced-motion:reduce){
+  .page,.dots::after{animation:none}
+  .dots::after{content:"..."}
 }
-
-.auth-btn:active {
-  transform: translateY(1px);
-}
-
-.auth-btn + .auth-btn {
-  margin-top: -12px;
-}
-
-/* =========================================
-   Auth note (利用規約)
-   ========================================= */
-.auth-note {
-  font-size: 0.72rem;
-  color: #bbb;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.auth-note a {
-  color: #999;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-  transition: color 0.18s ease;
-}
-
-.auth-note a:hover { color: #6ddbb0; }
-
-html[data-theme="dark"] .auth-note   { color: #444; }
-html[data-theme="dark"] .auth-note a { color: #555; border-bottom-color: rgba(255, 255, 255, 0.1); }
-
-/* =========================================
-   Result pages (success / error)
-   ========================================= */
-.result-icon {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.result-icon svg { flex-shrink: 0; width: 36px; height: 36px; }
-
-.result-icon--success {
-  background: rgba(109, 219, 176, 0.15);
-  color: #4bc48a;
-}
-
-.result-icon--error {
-  background: rgba(224, 82, 82, 0.12);
-  color: #e05252;
-}
-
-.error-reason {
-  background: rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.07);
-  border-radius: 24px;
-  padding: 14px 18px;
-  font-size: 0.82rem;
-  color: #777;
-  line-height: 1.65;
-  margin-bottom: 24px;
-  text-align: left;
-  letter-spacing: 0.02em;
-}
-
-html[data-theme="dark"] .error-reason {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.07);
-  color: #666;
-}
-
-/* =========================================
-   Turnstile widget
-   ========================================= */
-.turnstile-wrap {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.turnstile-retry {
-  font-size: 0.78rem;
-  color: #e05252;
-  margin-bottom: 16px;
-}
-
-/* =========================================
-   Verify page
-   ========================================= */
-.verify-icon {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  background: rgba(39, 87, 102, 0.1);
-  color: #3a8a7a;
-}
-
-.verify-icon svg { flex-shrink: 0; width: 36px; height: 36px; }
-
-html[data-theme="dark"] .verify-icon {
-  background: rgba(186, 255, 192, 0.07);
-  color: #6ddbb0;
-}
-
-.auth-step {
-  font-size: 0.68rem;
-  color: #bbb;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-
-html[data-theme="dark"] .auth-step { color: #555; }
